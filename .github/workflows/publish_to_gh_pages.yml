@@ -1,0 +1,64 @@
+# This workflow will install iSB Python dependencies, run the csv to sitemap transformation, and publish to gh-pages with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+ name: Transform CSV to gh-pages sitemap
+
+ on:
+   push:
+     branches: [ main ]
+   workflow_dispatch:
+     
+ jobs:
+   build:
+     runs-on: ubuntu-latest
+     strategy:
+       matrix:
+         python-version: [3.9]
+     steps:
+     - name: Checkout csv repo     
+       uses: actions/checkout@v3       
+     - name: Checkout iSB     
+       uses: actions/checkout@v3
+       with:
+         repository: isamplesorg/isamples_inabox
+         path: isamples_inabox
+         ref: develop
+     - name: Set up Python ${{ matrix.python-version }}
+       uses: actions/setup-python@v2
+       with:
+         python-version: ${{ matrix.python-version }}              
+     - name: Install Poetry
+       uses: snok/install-poetry@v1
+       with:
+         virtualenvs-create: true
+         virtualenvs-in-project: true
+     - name: install pip
+       run: |
+         cd isamples_inabox
+         poetry run python -m pip install --upgrade pip
+     - name: Hacked install of pybind11
+       run: |
+         cd isamples_inabox 
+         poetry run python -m pip install pybind11
+     - name: Hacked install of fasttext
+       run: |
+         cd isamples_inabox
+         poetry run python -m pip install fasttext
+     - name: Install dependencies
+       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+       run: |
+         cd isamples_inabox
+         poetry install --no-interaction --no-root
+     - name: Run iSamples in a Box CSV to Sitemap transformation script
+       run: |
+         mkdir sitemaps
+         cd isamples_inabox
+         source ./.venv/bin/activate
+         export PYTHONPATH=.
+         python scripts/isb_things.py validate -f ../simple_isamples.csv
+         python scripts/isb_things.py sitemap -f ../simple_isamples.csv -d ../sitemaps -u "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/raw/gh-pages/"
+     - name: Deploy 🚀 
+       uses: JamesIves/github-pages-deploy-action@v4.3.3
+       with:
+         branch: gh-pages # The branch the action should deploy to.
+         folder: ./sitemaps
