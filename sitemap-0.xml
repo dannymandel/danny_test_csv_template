@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <url>
+    <loc>https://github.com/dannymandel/danny_test_csv_template/raw/gh-pages/DOI:1234567.json</loc>
+    <lastmod>2022-09-06 20:46:01.170906</lastmod>
+  </url>
+  <url>
     <loc>https://github.com/dannymandel/danny_test_csv_template/raw/gh-pages/DOI:12345.json</loc>
-    <lastmod>2022-09-06 20:37:04.710280</lastmod>
+    <lastmod>2022-09-06 20:46:01.170923</lastmod>
   </url>
   <url>
     <loc>https://github.com/dannymandel/danny_test_csv_template/raw/gh-pages/DOI:123456.json</loc>
-    <lastmod>2022-09-06 20:37:04.710294</lastmod>
+    <lastmod>2022-09-06 20:46:01.170929</lastmod>
   </url>
 </urlset>
